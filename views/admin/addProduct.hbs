@@ -1,0 +1,534 @@
+
+{{>adminheader}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add Product</title>
+   
+    <link rel="stylesheets" type="text/stylesheets" href="/stylesheets/addproduct.css">
+
+</head>
+<style>
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+    }
+
+ 
+    .form-field {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+   
+    .form-field label {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+
+  
+    .form-field input {
+        padding: 0.5rem;
+        border: 2px solid #000000;
+        border-radius: 4px;
+    }
+
+   
+    .image-preview {
+        width: 200px;
+        height: 200px;
+        border: 2px solid #000000;
+        margin-bottom: 1rem;
+    }
+
+    .submit-button {
+        padding: 0.5rem;
+        background-color: #D19C97;
+        color: rgb(16, 15, 15);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    body {
+        background-color: #f6f2f2;
+    }
+
+    .table-container {
+        max-width: 1075px;
+        margin: 0 auto;
+        margin-top: 50px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-container h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .table-container td {
+        vertical-align: middle;
+    }
+
+    .table-container a {
+        margin-right: 10px;
+    }
+
+    .error {
+        color: red;
+    }
+</style>
+
+<body>
+    <script>
+        function
+       function check1() {
+    const nameInput = document.getElementById('name');
+    const nameRegex = /[a-zA-Z\s]{3,}/; 
+    if (!nameRegex.test(nameInput.value)) {
+        document.getElementById('nameErrorMessage').textContent = 'Please enter a proper name';
+    } 
+}   
+ function check2(){
+    const descriptionInput = document.getElementById('description');
+    const nameRegex = /[a-zA-Z\s]{3,}/;
+    if (!nameRegex.test(descriptionInput.value)) {
+        document.getElementById('descriptionErrorMessage').textContent = 'Please enter a proper description';
+    } 
+} 
+function check3(){
+    const priceInput = document.getElementById('price');
+    const priceRegex = /^\d+(\.\d+)?$/
+    if(!priceRegex.test(priceInput.value)){
+         document.getElementById('priceErrorMessage').textContent = 'Please enter a proper price';
+    }
+}
+function check4(){
+    const brandInput = document.getElementById('brand');
+    const nameRegex = /[a-zA-Z\s]{3,}/
+    if (!nameRegex.test(brandInput.value)) {
+        document.getElementById('brandErrorMessage').textContent = 'Please enter a proper brand name';
+    } 
+}
+function check5(){
+     const quantityInput = document.getElementById('quantity')
+     const qtyRegex = /^\d+(\.\d+)?$/
+     if(!qtyRegex.test(quantityInput.value)){
+         document.getElementById('quantityErrorMessage').textContent = 'Please enter a proper price';
+    }
+}
+function checkme(){
+     const priceInput = document.getElementById('price');
+    const priceRegex = /^\d+(\.\d+)?$/
+    if(!priceRegex.test(priceInput.value)){
+         document.getElementById('priceErrorMessage').textContent = 'Please enter a proper price';
+    }
+}
+
+
+    </script>
+  
+        <div class="table-container">
+            <div class="form-container">
+                <h3>Add Product</h3>
+                <form action="" id="addProduct" method="post" enctype="multipart/form-data">
+                    <div class="form-field">
+                        <label for="name">Name:</label>
+                        <input type="text"  id="name" name="name"  onchange="check1()" required>
+                        {{!-- <input type="text" pattern="[a-zA-Z\s]{3,}" class="form-control" id="inputFullName" required name="name"> --}}
+                       <p id="nameErrorMessage" class="error"></p>
+                    </div>
+                    <div class="form-field">
+                        <label for="name">Description:</label>
+                        <input type="text"  id="description" pattern="[a-zA-Z\s]{3,}" name="description" onchange="check2()" required>
+                         <p id="descriptionErrorMessage" class="error"></p>
+                    </div>
+                    {{!-- <div class="form-field">
+                        <label for="image">Image:</label>
+                        <input type="file" id="image0" name="image" accept="image/*" 
+                            multiple>
+                        
+                    </div>
+                    <div class="form-field">
+                        <label for="image">Image:</label>
+                        <input type="file" id="image1" name="image" accept="image/*" 
+                            multiple>
+                      
+                    </div>
+                    <div class="form-field">
+                        <label for="image">Image:</label>
+                        <input type="file" id="image2" name="image" accept="image/*" 
+                            multiple>
+                       
+                    </div>
+                    <div class="form-field">
+                        <label for="image">Image:</label>
+                        <input type="file" id="image3" name="image" accept="image/*" 
+                            multiple>
+                        
+                    </div> --}}
+
+
+
+                    <div class="form-field">
+    <label for="images">Images:</label>
+    <input type="file" id="images" name="image" accept="image/*" multiple>
+    
+    <div id="image-preview-container"></div>
+    <button id="removeAllBtn" style="display: none;">Remove</button>
+</div>
+
+
+                    <div class="form-field">
+                        <label for="name">Category:</label>
+                        <select id="category" name="category" input type="text">
+                            {{#each categoryData}}
+                            <option value={{this.name}}>{{this.name}}</option>
+                            {{/each}}
+                        </select>
+
+                    </div>
+
+                    <div class="form-field">
+                        <label for="name">Price:</label>
+                        <input type="number" id="price" pattern="/^\d+(\.\d+)?$/" name="price" onchange="checkme()" min=0 >
+                        <p id="priceErrorMessage" class="error"></p>
+                    </div>
+                    <div class="form-field">
+                        <label for="name">Brand:</label>
+                        <input type="text"  id="brand" name="brand" onchange="check4()">
+                       <p id="brandErrorMessage" class="error"></p>
+                    </div>
+                    <div class="form-field">
+                        <label for="name">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" onchange="check5()">
+                        <p id="quantityErrorMessage" class="error"></p>
+                    </div>
+                    <div class="form-field">
+                        <label for="name">offer</label>
+                        <input type="number" id="offer" name="offer" >
+                       
+                    </div>
+
+                    <div>
+                        <h6>
+                            <p style="color: green;">
+                                {{message}}
+                            </p>
+                        </h6>
+                    </div>
+
+                    <div>
+                        <h6 style="color: rgb(202, 14, 14);">
+                            {{message1}}
+                        </h6>
+                    </div>
+                    <button class="submit-button" type="submit" onclick="validateForm(event)">Submit</button>
+                    <a href="/admin/dashboard" class="btn btn-edit">Go Back</a>
+                </form>
+            </div>
+
+        </div>
+
+    <script>
+        function validateForm(event) {
+    event.preventDefault(); 
+
+   
+    const name = document.getElementById('name').value;
+    const description = document.getElementById('description').value;
+    const price = parseFloat(document.getElementById('price').value); 
+    const brand = document.getElementById('brand').value;
+    const quantity = parseInt(document.getElementById('quantity').value); 
+
+    const nameErrorMessage = document.getElementById('nameErrorMessage');
+    const descriptionErrorMessage = document.getElementById('descriptionErrorMessage');
+    const priceErrorMessage = document.getElementById('priceErrorMessage');
+    const brandErrorMessage = document.getElementById('brandErrorMessage');
+    const quantityErrorMessage = document.getElementById('quantityErrorMessage');
+
+    
+    nameErrorMessage.textContent = "";
+    descriptionErrorMessage.textContent = "";
+    priceErrorMessage.textContent = "";
+    brandErrorMessage.textContent = "";
+    quantityErrorMessage.textContent = "";
+
+    
+    if (!name.match(/[a-zA-Z\s]{3,}/)) {
+        nameErrorMessage.textContent = "Name should contain at least 3 alphabetical characters.";
+        return;
+    }
+
+    if (!description.match(/[a-zA-Z\s]{3,}/)) {
+        descriptionErrorMessage.textContent = "Description should contain at least 3 alphabetical characters.";
+        return;
+    }
+
+    if (price < 0 || isNaN(price)) {
+        priceErrorMessage.textContent = "Price should be a non-negative number.";
+        return;
+    }
+
+    if (brand === "") {
+        brandErrorMessage.textContent = "Brand is required.";
+        return;
+    }
+
+    if (quantity <= 0 || isNaN(quantity)) {
+        quantityErrorMessage.textContent = "Quantity should be a positive number.";
+        return;
+    }
+
+   
+    document.getElementById("addProduct").submit();
+}
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $.validator.addMethod("numbersOnly", function (value, element) {
+                return this.optional(element) || /^\d+$/.test(value);
+            });
+
+        
+            $("#addProduct").validate({
+                rules: {
+                    name: {
+                        required: true,
+
+                    },
+                    description: {
+                        required: true,
+
+                    },
+                    image: {
+                        required: true,
+
+                    },
+                    image1: {
+                        required: true,
+
+                    },
+                    image2: {
+                        required: true,
+
+                    },
+                    image3: {
+                        required: true,
+
+                    },
+                    category: {
+                        required: true,
+                    },
+                    price: {
+                        required: true,
+                        numbersOnly: true
+
+                    },
+
+                    brand: {
+                        required: true,
+                    },
+
+                    quantity: {
+                        required: true,
+                    }
+
+
+                },
+                messages: {
+
+                    name: {
+
+                        required: "Enter valid name",
+                    },
+                    description: {
+                        required: "Please enter description ",
+
+                    },
+                    image: {
+
+                        required: "Choose valid image"
+
+                    },
+                    image1: {
+                        required: "Choose valid image"
+                    },
+                    image2: {
+                        required: "Choose valid image"
+                    },
+                    image3: {
+                        required: "Choose valid image"
+                    },
+                    category: {
+                        required: "Select the category",
+                    },
+                    price: {
+                        required: "Enter the price",
+                        numbersOnly: "please enter numbers"
+                    },
+
+                    brand: {
+                        required: "Enter the brand",
+                    },
+
+                    quantity: {
+                        required: "enter the quantity",
+                    }
+                }
+            })
+        })
+    {{!-- </script> --}}
+
+     if({{res}}=='success'){
+       Swal.fire({
+                title: "Success",
+                text: "Item added successfully !",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "OK",
+                timer: 3000,
+            })
+    }
+    </script>
+
+
+</body>
+
+</html>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
+
+<script>
+
+ if({{res}}=='success'){
+       Swal.fire({
+                title: "Success",
+                text: "Item added successfully !",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "OK",
+                timer: 3000,
+            })
+    }
+
+</script>
+
+
+{{!-- <script>
+    document.getElementById('images').addEventListener('change', function (e) {
+    const imageContainer = document.getElementById('image-preview-container');
+    imageContainer.innerHTML = '';
+
+    const files = e.target.files;
+    for (const file of files) {
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.style.width = '100px'; // Adjust image size as needed
+            img.style.height = '100px';
+            imageContainer.appendChild(img);
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
+</script> --}}
+{{!-- //////////////////////////////////////////////////// --}}
+{{!-- <script>
+    document.getElementById('images').addEventListener('change', function (e) {
+    const imageContainer = document.getElementById('image-preview-container');
+    imageContainer.innerHTML = '';
+
+    const files = e.target.files;
+    for (const file of files) {
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.style.width = '100px'; // Adjust image size as needed
+            img.style.height = '100px';
+
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = function () {
+                img.remove();
+                removeButton.remove();
+                // If you need further handling, like removing the file from the input, do it here
+            };
+
+            const imageDiv = document.createElement('div');
+            imageDiv.appendChild(img);
+            imageDiv.appendChild(removeButton);
+
+            imageContainer.appendChild(imageDiv);
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
+</script> --}}
+
+{{!-- wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww --}}
+
+<script>
+    document.getElementById('images').addEventListener('change', function (e) {
+        const imageContainer = document.getElementById('image-preview-container');
+        imageContainer.innerHTML = '';
+
+        const files = e.target.files;
+        const removeAllBtn = document.getElementById('removeAllBtn');
+        removeAllBtn.style.display = files.length ? 'block' : 'none'; // Show Remove All button if files are selected
+
+        for (const file of files) {
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.style.width = '100px'; // Adjust image size as needed
+                img.style.height = '100px';
+
+                const imageDiv = document.createElement('div');
+                imageDiv.appendChild(img);
+                imageContainer.appendChild(imageDiv);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('removeAllBtn').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default behavior of the button click
+        const imageContainer = document.getElementById('image-preview-container');
+        imageContainer.innerHTML = '';
+        document.getElementById('images').value = ''; // Clear the input field value to remove selected files
+        this.style.display = 'none'; // Hide Remove All button after removing images
+    });
+</script>
+
+
+

@@ -1,0 +1,134 @@
+
+
+{{>adminheader}}
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+{{#if dailyorders}}
+
+{{!-- <button class="btn btn-success ml-3 mt-3" onclick="printPage()">Print</button> --}}
+<div class="container mt-3">
+
+  <table class="table">
+  <thead>
+    <tr>
+
+      <th scope="col">Total Order</th>
+      <th scope="col"></th>
+      <th scope="col">Total Revenue</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+
+      <td>{{dailyorders.length}}</td>
+      <td></td>
+      <td>{{totalOrderBill}}</td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+    <table class="table">
+        <thead class="thead-dark">
+
+            <tr>
+                <th scope="col">ORDER ID</th>
+                <th scope="col">payment mode</th>
+
+                <th scope="col">ORDER DATE</th>
+                {{!-- <th scope="col">DISCOUNT</th> --}}
+                <th scope="col">TOTAL BILL</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {{#each dailyorders}}
+            <tr>
+
+                <td>{{this._id}}</td>
+                <td>{{this.paymentMode}}</td>
+                <td>{{this.dateOrdered}}</td>
+                {{!-- <td>{{this.discount}}</td> --}}
+                <td>{{this.totalBill}}</td>
+               
+
+
+            </tr>
+                  {{/each}}
+
+
+
+        </tbody>
+
+
+    </table>
+    <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+</div>
+{{else}}
+<div class="container p-5">
+    <h2>Nothing Here</h2>
+</div>
+{{/if}}
+
+</div>
+
+
+
+
+<script>
+const xValues = [];
+const yValues = []
+const daysale= {{{dailyorders.length}}}
+yValues.push(daysale)
+const barColors = ["red"];
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "total orders"
+    }
+  }
+});
+</script>
+
+
+
+
+<script>
+    function printPage() {
+  window.print();
+}
+
+
+const daysale= {{{dailyorders.length}}}
+console.log(daysale,"daily sales")
+</script>
+
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/chart/chart.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="lib/tempusdominus/js/moment.min.js"></script>
+<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<script src="/admin/js/main.js"></script>

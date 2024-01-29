@@ -1,0 +1,116 @@
+{{>adminheader}}
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.5.0/css/bootstrap.min.css">
+ 
+  <link rel="stylesheet" type="text/stylesheets" href="/stylesheets/category.css">
+</head>
+
+
+<body>
+  <div class="container">
+    <div class="table-container">
+      <h1>Categories</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        
+
+        <tbody>
+          {{#each category}}
+          <tr>
+
+            <td>{{this.name}}</td>
+
+            <td><img src="/uploads/{{this.image}}" alt="{{this.image}}" width="100px" height="100px"></td>
+            <td>
+
+
+
+              
+              <a href="/admin/editcategory?id={{this._id }}" class="btn btn-edit">Edit</a>
+
+
+              
+
+              
+              <a href="#" data-category-id="{{this._id}}" onclick="showDeleteConfirmation(event);"
+                class="btn btn-delete">Delete</a>
+
+
+            </td>
+
+          </tr>
+          {{/each}}
+
+        </tbody>
+      </table>
+      <a href="/admin/addcategory" class="btn btn-success">Add Category</a>
+    </div>
+  </div>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.5.0/js/bootstrap.min.js"></script>
+
+ 
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  <script>
+    function showDeleteConfirmation(event) {
+      event.preventDefault();
+      const categoryId = event.target.getAttribute("data-category-id");
+    
+      return new Promise((resolve) => {
+        swal({
+          title: "Are you sure?",
+          text: "Once deleted, you will not be able to recover this category!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }) 
+          .then((willDelete) => {
+            if (willDelete) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          });
+      })
+        .then((confirmed) => {
+          if (confirmed) {
+            fetch(`/admin/deletecategory?id=${categoryId}`, {
+              method: "GET"
+            })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`Failed to delete category: ${response.status}`); 
+                }
+                location.reload(); 
+              })
+              .catch(error => {
+                console.error(error);
+                alert("Failed to delete category");
+              });
+          }
+        });
+    }
+  </script>
+</body>
+
+</html>

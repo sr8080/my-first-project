@@ -1,0 +1,309 @@
+{{>adminheader}}
+
+
+<style>
+    header {
+        background-color: rgb(237, 236, 236);
+        padding: 20px;
+        text-align: center;
+    }
+
+    .header {
+        text-align: center;
+    }
+
+    .header h1 {
+        font-size: 36px;
+        font-weight: bold;
+        color: #f2f2f2;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 0;
+        padding: 20px 0;
+    }
+
+    .header {
+        border-bottom: 1px solid #eeeded;
+    }
+
+    .card {
+        background-color: rgb(233, 231, 231);
+    }
+
+    .card-body {
+        text-align: center;
+    }
+     .btn-success {
+        color: rgb(0, 0, 0);
+        background-color: rgb(208, 156, 167);
+    }
+    
+
+
+
+
+    /* Sales Report Section */
+.sales-report {
+    margin-top: 40px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.sales-report-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.sales-report-form {
+    margin-bottom: 15px;
+}
+
+.sales-report-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.sales-report-form input[type="date"],
+.sales-report-form input[type="month"],
+.sales-report-form input[type="number"] {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: calc(100% - 80px);
+    margin-bottom: 10px;
+}
+
+.sales-report-button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sales-report-button:hover {
+    background-color: #0056b3;
+}
+
+</style>
+
+<header>
+   <div class="error-content text-center" style="background-image: url(/image/9ba09080924795.5cef394f1046e-COPY.jpg); background-size: cover;">
+  <div class="container">
+    <h2 class="section-title px-5">
+      <span class="px-2" style="color: green; font-size: 48px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
+       Welcome to Admin Dashboard
+      </span>
+    </h2>
+    <p style="color: green; font-size: 24px;">Click here to access the sales report,</p>
+    <a  href="/admin/salesreport" class="btn btn-success btn-lg">Sales Report</a>
+  </div><!-- End .container -->
+</div>
+
+</header>
+
+
+<div class="container-fluid">
+    <div class="row row-cols-1 row-cols-md-4 g-4 mt-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Total Users</h2>
+                    <h3 class="card-text">{{users}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Total Products</h2>
+                    <h3 class="card-text">{{products}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Total Orders</h2>
+                    <h3 class="card-text">{{orders}}</h3>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 style="text-align: center;">Sales Data</h5>
+                    <hr>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 style="text-align: center;">Payment Data</h5>
+                    <hr>
+                    <canvas id="myChart2"></canvas>
+                    <input id="cashondelivery" type="hidden" name="cashondelivery" value="{{cashOnDeliveryCount}}">
+                    <input id="razorpay" type="hidden" name="razorpay" value="{{razorPayCount}}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+          <div class="sales-report">
+
+
+ 
+
+
+
+
+
+  <h5 class="sales-report-title">Sales Report</h5>
+  <hr>
+  <div class="sales-report-form">
+    <form action="/admin/dailysales" method="post">
+      <label for="daily">Daily sales</label>
+      <input type="date" name="daily" id="daily">
+      <button class="sales-report-button" type="submit">View</button>
+    </form>
+  </div>
+  <br>
+  <div class="sales-report-form">
+    <form action="/admin/monthly-report" method="post">
+      <label for="monthly">Monthly sales</label>
+      <input type="month" name="month" id="month">
+      <button class="sales-report-button" type="submit">View</button>
+    </form>
+  </div>
+  <br>
+  <div class="sales-report-form">
+    <form action="/admin/yearly-report" method="post">
+      <label for="yearly">Yearly sales</label>
+      <input type="number" name="yearly" id="yearly" min="2022" max="2024" value="2023">
+      <button class="sales-report-button" type="submit">View</button>
+    </form>
+  </div>
+</div>
+
+
+</div>
+
+
+
+
+<
+<br>
+<br>
+<br>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<script>
+    const orderCounts = {{{ json orderCounts }}};
+    console.log(orderCounts,"order counts")
+    const dates = orderCounts.map(order => order.month);
+    const counts = orderCounts.map(order => order.count);
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Total orders',
+                data: counts,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+<!-- Payment Data -->
+<script>
+    const ctx2 = document.getElementById("myChart2").getContext("2d");
+    const cashOnDeliveryCount = parseInt(document.getElementById("cashondelivery").value);
+    const razorPayCount = parseInt(document.getElementById("razorpay").value);
+
+    new Chart(ctx2, {
+        type: "pie",
+        data: {
+            labels: ['Cash on Delivery', 'RazorPay'],
+            datasets: [{
+                label: 'Payment Method',
+                data: [cashOnDeliveryCount, razorPayCount],
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                ],
+                hoverOffset: 4
+            }]
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const catOrderCounts = JSON.parse('{{ categorysale }}');
+    const catNames = catOrderCounts.map(order => order.category);
+    const catCounts = catOrderCounts.map(order => order.count);
+
+    const ctx3 = document.getElementById("myChart3").getContext("2d");
+
+    new Chart(ctx3, {
+        type: "pie",
+        data: {
+            labels: catNames,
+            datasets: [{
+                label: 'Total Count',
+                data: catCounts,
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{{!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
+
+
+
+
+
+

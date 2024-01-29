@@ -1,0 +1,158 @@
+{{>adminheader}}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Edit Category</title>
+  {{!-- <link rel="stylesheet" type="text/css" href="/css/editcategory.css"> --}}
+  <link rel="stylesheet" href="/stylesheets/editcategory.css">
+</head>
+<style>
+  /* Reset some default styles */
+body, h1, p, label, input, button {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+}
+
+.form-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-field {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.image-preview {
+  margin-top: 10px;
+}
+
+.submit-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+/* Style for error message */
+p {
+  color: rgb(183, 6, 6);
+  margin-top: 10px;
+}
+
+/* Style for file input */
+input[type="file"] {
+  margin-top: 5px;
+}
+
+/* Responsive image preview */
+.image-preview img {
+  max-width: 100%;
+  height: auto;
+}
+
+</style>
+<body>
+  <div class="form-container">
+    <h1>Edit Category</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+
+      <div class="form-field">
+        <label for="name">Name:</label>
+        <input type="text" id="name" value="{{category.name }}" required name="name">
+      </div>
+
+
+        <label for="image">Images:</label>
+        <img src="/uploads/{{category.image}}" alt="{{@index}}" width="100px" height="100px">
+     
+
+      
+      <div class="form-field">
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" value={{category.image }} accept="image/*"
+          onchange="previewImage(event)">
+        <div  class="image-preview"></div>
+      </div>
+
+
+      <div>
+        <p style="color: rgb(183, 6, 6);">
+          {{message}}
+        </p>
+      </div>
+
+      <button class="submit-button" type="submit">Submit</button>
+
+      <input type="hidden" name="id" value="{{category._id }}">
+
+    </form>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    function previewImage(event) {
+      const preview = document.querySelector('.image-preview');
+      preview.innerHTML = '';
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const img = new Image();
+        img.src = event.target.result;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+
+</html>
